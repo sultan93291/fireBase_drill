@@ -8,7 +8,8 @@ import {
   remove,
   update,
 } from "firebase/database";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import firebaseConfig from "./Configuration/FireBaseConf";
 
 function App() {
@@ -25,7 +26,16 @@ function App() {
         Mytodo: Text,
       });
       setText("");
-      console.log("todo creating ");
+      toast.success("todo created!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } else {
       console.log("empty space");
     }
@@ -65,7 +75,16 @@ function App() {
     const Mytodo = {
       Mytodo: Text,
     };
-    console.log(Edit);
+    toast.success("todo updated!", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
     update(ref(db, "alltodo/" + Edit), Mytodo).then(() => {
       console.log("updated data");
       setText("");
@@ -76,29 +95,71 @@ function App() {
   // deleting existing todo
   const handleDelete = deleteId => {
     remove(ref(db, "alltodo/" + deleteId)).then(
-      console.log("sucessfully deleted")
+      toast.error("todo deleted successfully", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      })
     );
   };
 
   return (
     <>
-      <input type="text" onChange={e => setText(e.target.value)} value={Text} />
-      {Edit ? (
-        <button onClick={HandleEdit}> edit Data</button>
-      ) : (
-        <button onClick={handleSubmit}> submit Data</button>
-      )}
-      {Todos.map((todo, index) => (
-        <div key={index}>
-          {" "}
-          <p> {todo.data.Mytodo} </p>
-          <button onClick={() => handleDelete(todo.id)}> delete todo</button>
-          <button onClick={() => handleEditInfo(todo.id, todo.data.Mytodo)}>
-            {" "}
-            edit todo
-          </button>
+      {" "}
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <div className="todos">
+        <div>
+          <h1>firebase todo crud</h1>
+          <div className="input__wrapper">
+            <input
+              type="text"
+              onChange={e => setText(e.target.value)}
+              value={Text}
+            />
+            {Edit ? (
+              <button onClick={HandleEdit}> edit Data</button>
+            ) : (
+              <button onClick={handleSubmit}> submit Data</button>
+            )}
+          </div>
+          {Todos.map((todo, index) => (
+            <div key={index} id="main">
+              {" "}
+              <ul id="todo">
+                <li> {todo.data.Mytodo} </li>
+              </ul>
+              <div className="btn__wrapper">
+                <button
+                  onClick={() => handleEditInfo(todo.id, todo.data.Mytodo)}
+                >
+                  {" "}
+                  edit todo
+                </button>
+                <button onClick={() => handleDelete(todo.id)}>
+                  {" "}
+                  delete todo
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </>
   );
 }
