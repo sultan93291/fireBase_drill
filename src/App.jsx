@@ -57,7 +57,7 @@ function App() {
         todoArr.push(todoItem);
       });
       // finally pushing data to todos
-      setTodos(todoArr);
+      setTodos(todoArr.reverse());
     });
   }, []);
 
@@ -142,20 +142,20 @@ function App() {
             <div key={index} id="main">
               {" "}
               <ul id="todo">
+                <div className="btn__wrapper">
+                  <button
+                    onClick={() => handleEditInfo(todo.id, todo.data.Mytodo)}
+                  >
+                    {" "}
+                    edit todo
+                  </button>
+                  <button onClick={() => handleDelete(todo.id)}>
+                    {" "}
+                    delete todo
+                  </button>
+                </div>
                 <li> {todo.data.Mytodo} </li>
               </ul>
-              <div className="btn__wrapper">
-                <button
-                  onClick={() => handleEditInfo(todo.id, todo.data.Mytodo)}
-                >
-                  {" "}
-                  edit todo
-                </button>
-                <button onClick={() => handleDelete(todo.id)}>
-                  {" "}
-                  delete todo
-                </button>
-              </div>
             </div>
           ))}
         </div>
